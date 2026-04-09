@@ -266,7 +266,7 @@ if (mobileMenuToggle) {
 
         // 1. Submit to Mailchimp audience list (via JSONP to bypass CORS)
         try {
-            const mailchimpUrl = 'https://gmail.us18.list-manage.com/subscribe/post-json?u=f0c61ca82eaa7e55cd03bf1f1&id=97327f05b0&f_id=00bdb7e6f0&EMAIL=' + encodeURIComponent(email) + '&c=mailchimpCallback';
+            const mailchimpUrl = 'https://gmail.us18.list-manage.com/subscribe/post-json?u=f0c61ca82eaa7e55cd03bf1f1&id=97327f05b0&f_id=00bdb7e6f0&EMAIL=' + encodeURIComponent(email) + '&b_f0c61ca82eaa7e55cd03bf1f1_97327f05b0=&c=mailchimpCallback';
             
             // Create a global callback for JSONP
             window.mailchimpCallback = function(response) {
