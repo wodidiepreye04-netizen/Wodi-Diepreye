@@ -264,11 +264,33 @@ if (mobileMenuToggle) {
         btnText.style.display = 'none';
         btnLoader.style.display = 'inline-block';
 
+        // 1. Submit to Mailchimp audience list (via JSONP to bypass CORS)
         try {
-            // Submit to Mailchimp via the connected script
-            // The mcjs script handles Mailchimp integration,
-            // so we also send the email to the Google Sheets endpoint
-            // for backup tracking
+            const mailchimpUrl = 'https://gmail.us18.list-manage.com/subscribe/post-json?u=f0c61ca82eaa7e55cd03bf1f1&id=97327f05b0&f_id=00bdb7e6f0&EMAIL=' + encodeURIComponent(email) + '&c=mailchimpCallback';
+            
+            // Create a global callback for JSONP
+            window.mailchimpCallback = function(response) {
+                if (response.result === 'success') {
+                    console.log('Mailchimp subscription successful');
+                } else {
+                    console.log('Mailchimp response:', response.msg);
+                }
+                // Clean up
+                delete window.mailchimpCallback;
+            };
+            
+            const script = document.createElement('script');
+            script.src = mailchimpUrl;
+            document.body.appendChild(script);
+            // Clean up script tag after load
+            script.onload = () => document.body.removeChild(script);
+            script.onerror = () => document.body.removeChild(script);
+        } catch (err) {
+            console.error('Mailchimp subscription error:', err);
+        }
+
+        // 2. Also save to Google Sheets as backup
+        try {
             await fetch(WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -281,7 +303,7 @@ if (mobileMenuToggle) {
                 })
             });
         } catch (err) {
-            console.error('Subscription tracking error:', err);
+            console.error('Google Sheets tracking error:', err);
         }
 
         // Show success state regardless (no-cors won't give us a readable response)
@@ -305,14 +327,14 @@ if (mobileMenuToggle) {
 
     // ---- POPUP TRIGGERS ----
 
-    // 1. Timed trigger: show after 10 seconds
+    // 1. Timed trigger: show after 1 second
     let popupShown = false;
     setTimeout(() => {
         if (!popupShown && !wasRecentlyDismissed()) {
             showPopup();
             popupShown = true;
         }
-    }, 10000);
+    }, 1000);
 
     // 2. Exit intent trigger (mouse leaves viewport at top)
     document.addEventListener('mouseout', (e) => {
