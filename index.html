@@ -90,43 +90,58 @@
                 <p class="work-intro">A selection of projects where strategy met structure — and the results spoke for themselves.</p>
             </div>
             <div class="work-grid">
-                <!-- Project 1 -->
+                <!-- Project 1: COEUS Website Copy -->
                 <div class="work-card">
-                    <div class="work-card-tag">
-                        <i class="fas fa-globe"></i>
-                        <span>Website Copy</span>
+                    <div class="work-card-image">
+                        <img src="COEUS website copy.jpeg" alt="COEUS mental health platform website copy" loading="lazy">
                     </div>
-                    <h3>SaaS Startup Brand Messaging</h3>
-                    <p>Rewrote the full website copy for a SaaS startup, turning a confusing product pitch into a clear, conversion-focused narrative that prospects could instantly understand.</p>
-                    <div class="work-card-result">
-                        <i class="fas fa-chart-line"></i>
-                        <span>3x increase in demo bookings</span>
+                    <div class="work-card-body">
+                        <div class="work-card-tag">
+                            <i class="fas fa-globe"></i>
+                            <span>Website Copy</span>
+                        </div>
+                        <h3>COEUS — Mental Health Platform</h3>
+                        <p>Wrote the full website copy and brand messaging for COEUS, a mental health platform for university students. Turned a clinical concept into an emotionally resonant narrative that speaks directly to students who've been "fine" for too long.</p>
+                        <div class="work-card-result">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Complete brand voice & conversion copy</span>
+                        </div>
                     </div>
                 </div>
-                <!-- Project 2 -->
+                <!-- Project 2: Apenas Luxo Email Campaign -->
                 <div class="work-card">
-                    <div class="work-card-tag">
-                        <i class="fas fa-envelope-open-text"></i>
-                        <span>Email Sequence</span>
+                    <div class="work-card-image">
+                        <img src="Apenas email campaingn .jpeg" alt="Apenas Luxo email launch campaign" loading="lazy">
                     </div>
-                    <h3>Coach Launch Email Funnel</h3>
-                    <p>Designed and wrote a 7-email launch sequence for a business coach, taking cold leads from awareness to paid enrollment with persuasive storytelling and clear CTAs.</p>
-                    <div class="work-card-result">
-                        <i class="fas fa-chart-line"></i>
-                        <span>42% open rate, 12% conversion</span>
+                    <div class="work-card-body">
+                        <div class="work-card-tag">
+                            <i class="fas fa-envelope-open-text"></i>
+                            <span>Email Launch Sequence</span>
+                        </div>
+                        <h3>Apenas Luxo — Fashion Brand Launch</h3>
+                        <p>Wrote a 7-email launch sequence for Apenas Luxo's best-selling product drop. Each email moved cold leads from curiosity to purchase with bold, identity-driven storytelling and premium positioning.</p>
+                        <div class="work-card-result">
+                            <i class="fas fa-chart-line"></i>
+                            <span>7-email funnel for best-selling product</span>
+                        </div>
                     </div>
                 </div>
-                <!-- Project 3 -->
+                <!-- Project 3: Swift VTU Landing Page Rewrite -->
                 <div class="work-card">
-                    <div class="work-card-tag">
-                        <i class="fas fa-rectangle-ad"></i>
-                        <span>Ad Copy & Landing Page</span>
+                    <div class="work-card-image">
+                        <img src="Swift VTU before and after.jpeg" alt="SwiftVTU landing page before and after rewrite" loading="lazy">
                     </div>
-                    <h3>E-Commerce Brand Relaunch</h3>
-                    <p>Crafted ad copy and a high-converting landing page for an e-commerce brand relaunch, aligning the messaging with a new target audience and premium positioning.</p>
-                    <div class="work-card-result">
-                        <i class="fas fa-chart-line"></i>
-                        <span>2.8x ROAS in first 30 days</span>
+                    <div class="work-card-body">
+                        <div class="work-card-tag">
+                            <i class="fas fa-rectangle-ad"></i>
+                            <span>Landing Page Rewrite</span>
+                        </div>
+                        <h3>SwiftVTU — Digital Hub Rebrand</h3>
+                        <p>Recrafted the entire landing page copy for SwiftVTU, transforming a generic "digital transactions" pitch into a bold, action-driven message — "Your All-in-One Digital Hub" — aligned with a younger, growth-focused audience.</p>
+                        <div class="work-card-result">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Complete landing page transformation</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -275,7 +290,25 @@
             <p class="modal-text">The exact framework I use to turn unclear ideas into high-converting copy. Download it free — no fluff, just structure that sells.</p>
             
             <form class="modal-form" id="leadMagnetForm">
-                <input type="email" name="EMAIL" class="modal-input" id="popupEmail" placeholder="Enter your email" required>
+                <input type="text" name="FNAME" class="modal-input" id="popupFname" placeholder="First name" autocomplete="given-name">
+                <input type="email" name="EMAIL" class="modal-input" id="popupEmail" placeholder="Email address *" required>
+                <div class="phone-input-group">
+                    <button type="button" class="country-selector" id="countrySelector" aria-label="Select country code">
+                        <span class="country-flag" id="countryFlag">🇳🇬</span>
+                        <span class="country-code" id="countryCode">+234</span>
+                        <i class="fas fa-chevron-down country-chevron"></i>
+                    </button>
+                    <input type="tel" name="PHONE" class="modal-input phone-number-input" id="popupPhone" placeholder="Phone number">
+                    <!-- Country dropdown (hidden by default) -->
+                    <div class="country-dropdown" id="countryDropdown">
+                        <input type="text" class="country-search" id="countrySearch" placeholder="Search country...">
+                        <ul class="country-list" id="countryList"></ul>
+                    </div>
+                </div>
+                <!-- Honeypot field for bot protection -->
+                <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                    <input type="text" name="b_f0c61ca82eaa7e55cd03bf1f1_97327f05b0" tabindex="-1" value="">
+                </div>
                 <button type="submit" class="modal-submit" id="popupSubmitBtn">
                     <span class="popup-btn-text">Get the Free Framework</span>
                     <span class="popup-btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>

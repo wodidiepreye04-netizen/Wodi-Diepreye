@@ -241,6 +241,74 @@ if (mobileMenuToggle) {
         }
     });
 
+    // ---- COUNTRY SELECTOR LOGIC ----
+    const countrySelector = document.getElementById('countrySelector');
+    const countryFlag = document.getElementById('countryFlag');
+    const countryCode = document.getElementById('countryCode');
+    const countryDropdown = document.getElementById('countryDropdown');
+    const countrySearch = document.getElementById('countrySearch');
+    const countryList = document.getElementById('countryList');
+
+    const countries = [
+        { name: 'Nigeria', code: 'NG', dial: '+234', flag: '🇳🇬' },
+        { name: 'United States', code: 'US', dial: '+1', flag: '🇺🇸' },
+        { name: 'United Kingdom', code: 'GB', dial: '+44', flag: '🇬🇧' },
+        { name: 'Canada', code: 'CA', dial: '+1', flag: '🇨🇦' },
+        { name: 'Australia', code: 'AU', dial: '+61', flag: '🇦🇺' },
+        { name: 'Germany', code: 'DE', dial: '+49', flag: '🇩🇪' },
+        { name: 'France', code: 'FR', dial: '+33', flag: '🇫🇷' },
+        { name: 'India', code: 'IN', dial: '+91', flag: '🇮🇳' },
+        { name: 'South Africa', code: 'ZA', dial: '+27', flag: '🇿🇦' },
+        { name: 'United Arab Emirates', code: 'AE', dial: '+971', flag: '🇦🇪' },
+        { name: 'Ghana', code: 'GH', dial: '+233', flag: '🇬🇭' },
+        { name: 'Kenya', code: 'KE', dial: '+254', flag: '🇰🇪' },
+        // Add more popular ones or a full list if needed
+    ].sort((a, b) => a.name.localeCompare(b.name));
+
+    function populateCountryList(filter = '') {
+        countryList.innerHTML = '';
+        const filtered = countries.filter(c => 
+            c.name.toLowerCase().includes(filter.toLowerCase()) || 
+            c.dial.includes(filter)
+        );
+
+        filtered.forEach(country => {
+            const li = document.createElement('li');
+            li.className = 'country-option';
+            li.innerHTML = `
+                <span class="flag">${country.flag}</span>
+                <span class="name">${country.name}</span>
+                <span class="dial-code">${country.dial}</span>
+            `;
+            li.addEventListener('click', () => {
+                countryFlag.textContent = country.flag;
+                countryCode.textContent = country.dial;
+                countryDropdown.classList.remove('active');
+            });
+            countryList.appendChild(li);
+        });
+    }
+
+    countrySelector?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        countryDropdown.classList.toggle('active');
+        if (countryDropdown.classList.contains('active')) {
+            countrySearch.focus();
+            populateCountryList();
+        }
+    });
+
+    countrySearch?.addEventListener('input', (e) => {
+        populateCountryList(e.target.value);
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!countrySelector.contains(e.target) && !countryDropdown.contains(e.target)) {
+            countryDropdown.classList.remove('active');
+        }
+    });
+
     // Trigger PDF download
     function triggerPdfDownload() {
         const link = document.createElement('a');
@@ -255,7 +323,14 @@ if (mobileMenuToggle) {
     leadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('popupEmail').value.trim();
+        const fname = document.getElementById('popupFname').value.trim();
+        const phoneRaw = document.getElementById('popupPhone').value.trim();
+        const dialCode = countryCode.textContent;
+        
         if (!email) return;
+
+        // Combine dial code and phone number
+        const fullPhone = phoneRaw ? `${dialCode}${phoneRaw.replace(/\s+/g, '')}` : '';
 
         // Show loading state
         const btnText = popupSubmitBtn.querySelector('.popup-btn-text');
@@ -266,7 +341,8 @@ if (mobileMenuToggle) {
 
         // 1. Submit to Mailchimp audience list (via JSONP to bypass CORS)
         try {
-            const mailchimpUrl = 'https://gmail.us18.list-manage.com/subscribe/post-json?u=f0c61ca82eaa7e55cd03bf1f1&id=97327f05b0&f_id=00bdb7e6f0&EMAIL=' + encodeURIComponent(email) + '&b_f0c61ca82eaa7e55cd03bf1f1_97327f05b0=&c=mailchimpCallback';
+            // Updated URL with extra fields
+            let mailchimpUrl = `https://gmail.us18.list-manage.com/subscribe/post-json?u=f0c61ca82eaa7e55cd03bf1f1&id=97327f05b0&f_id=00bdb7e6f0&EMAIL=${encodeURIComponent(email)}&FNAME=${encodeURIComponent(fname)}&PHONE=${encodeURIComponent(fullPhone)}&c=mailchimpCallback`;
             
             // Create a global callback for JSONP
             window.mailchimpCallback = function(response) {
@@ -275,14 +351,12 @@ if (mobileMenuToggle) {
                 } else {
                     console.log('Mailchimp response:', response.msg);
                 }
-                // Clean up
                 delete window.mailchimpCallback;
             };
             
             const script = document.createElement('script');
             script.src = mailchimpUrl;
             document.body.appendChild(script);
-            // Clean up script tag after load
             script.onload = () => document.body.removeChild(script);
             script.onerror = () => document.body.removeChild(script);
         } catch (err) {
@@ -296,9 +370,9 @@ if (mobileMenuToggle) {
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: 'Lead Magnet Subscriber',
+                    name: fname || 'Subscriber',
                     email: email,
-                    project: '[Lead Magnet] Downloaded 4-Step Message Framework PDF',
+                    project: `[Lead Magnet] Downloaded PDF. Phone: ${fullPhone}`,
                     timestamp: new Date().toISOString()
                 })
             });
@@ -306,22 +380,18 @@ if (mobileMenuToggle) {
             console.error('Google Sheets tracking error:', err);
         }
 
-        // Show success state regardless (no-cors won't give us a readable response)
+        // Show success state
         leadForm.style.display = 'none';
-        document.querySelector('#leadMagnetModal .modal-title').style.display = 'none';
-        document.querySelector('#leadMagnetModal .modal-text').style.display = 'none';
-        document.querySelector('#leadMagnetModal .modal-icon').style.display = 'none';
+        const modalContainer = document.querySelector('#leadMagnetModal .modal-container');
+        modalContainer.querySelector('.modal-title').style.display = 'none';
+        modalContainer.querySelector('.modal-text').style.display = 'none';
+        modalContainer.querySelector('.modal-icon').style.display = 'none';
         modalSuccess.style.display = 'block';
-
-        // Reset button state
-        popupSubmitBtn.disabled = false;
-        btnText.style.display = 'inline';
-        btnLoader.style.display = 'none';
 
         // Trigger the PDF download
         triggerPdfDownload();
 
-        // Mark as dismissed so it won't appear again
+        // Mark as dismissed
         markDismissed();
     });
 
