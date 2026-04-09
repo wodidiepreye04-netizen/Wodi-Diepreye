@@ -191,7 +191,7 @@ if (mobileMenuToggle) {
     if (!modal) return;
 
     const STORAGE_KEY = 'leadPopupDismissed';
-    const DISMISS_DAYS = 7;
+    const DISMISS_DAYS = 365; // Show only once a year
 
     // Check if popup was already dismissed recently
     function wasRecentlyDismissed() {
