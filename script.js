@@ -156,7 +156,7 @@ const observer = new IntersectionObserver((entries) => {
 }, observerOptions);
 
 // Observe sections for fade-in effect
-document.querySelectorAll('.about, .contact').forEach(section => {
+document.querySelectorAll('.work, .about, .contact').forEach(section => {
     section.style.opacity = '0';
     section.style.transform = 'translateY(30px)';
     section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
@@ -191,7 +191,7 @@ if (mobileMenuToggle) {
     if (!modal) return;
 
     const STORAGE_KEY = 'leadPopupDismissed';
-    const DISMISS_DAYS = 365; // Show only once a year
+    const DISMISS_DAYS = 7; // Show again after 7 days
 
     // Check if popup was already dismissed recently
     function wasRecentlyDismissed() {
